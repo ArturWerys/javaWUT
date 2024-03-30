@@ -10,7 +10,7 @@ public class Slider {
 	int sliderValue = 3;
 	
 	static final int SLIDER_MIN = 3;
-	static final int SLIDER_MAX = 12;
+	static final int SLIDER_MAX = 32;
 	static final int SLIDER_INIT = 3;
 
 	

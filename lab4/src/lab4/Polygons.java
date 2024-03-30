@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -27,11 +28,22 @@ import javax.swing.event.ChangeListener;
 public class Polygons extends JFrame implements ActionListener{
 
 	JPanel westPanel;
-	JPanel middlePanel;
+	DrawFunctions middlePanel;
 	JPanel eastPanel;
 	JPanel northPanel;
 	JPanel southPanel;
+	
+	JButton bgColorButton;
+	
+	JButton lineColorButton;
+	
+	Color bgColor = Color.white;
 		
+	public void setBgColor(Color bgColor) {
+		this.bgColor = bgColor;
+	}
+
+
 	public Polygons() throws HeadlessException {
 		
 		super();
@@ -57,12 +69,13 @@ public class Polygons extends JFrame implements ActionListener{
 		middlePanel = new DrawFunctions(slider);
 		add(middlePanel, BorderLayout.CENTER);
 		middlePanel.setPreferredSize(new Dimension(600,500));
+		middlePanel.setBackground(bgColor);
 		
 		
-		eastPanel = new JPanel();
-		eastPanel.setBackground(Color.blue);
+		eastPanel = new CordinatesPanel(middlePanel);
+		
 		add(eastPanel, BorderLayout.EAST);
-		eastPanel.setPreferredSize(new Dimension(75,500));
+		eastPanel.setPreferredSize(new Dimension(125,500));
 		
 		
 		northPanel = new JPanel();
@@ -71,8 +84,37 @@ public class Polygons extends JFrame implements ActionListener{
 		southPanel = new JPanel();
 		add(southPanel, BorderLayout.SOUTH);
 		southPanel.setPreferredSize(new Dimension(600,75));
-		southPanel.setBackground(Color.red);
+		southPanel.setBackground(Color.GRAY);
+		
+		bgColorButton = new JButton("Kolor tła");
+		bgColorButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        Color newColor = JColorChooser.showDialog(null, "Wybierz kolor tła", middlePanel.getBackground());
+		        if (newColor != null) {
+		            middlePanel.setBackground(newColor);
+		            middlePanel.repaint();
+		        }
+		    }
+		});
+		
+		southPanel.add(bgColorButton);
 
+		lineColorButton = new JButton("Kolor lini");
+		lineColorButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 Color newColor = JColorChooser.showDialog(null, "Wybierz kolor tła", middlePanel.getBackground());
+			        if (newColor != null) {
+			            middlePanel.setLineColor(newColor);
+			            middlePanel.repaint();
+			        }
+				
+			}
+		});
+		
+		southPanel.add(lineColorButton);
 		
 		
 		// menu
@@ -88,6 +130,31 @@ public class Polygons extends JFrame implements ActionListener{
 		//Dodawanie menu:
 		menu = new JMenu("Menu glowne");
 		menuBar.add(menu);
+		
+		menu.addSeparator();
+
+		JMenuItem linia5 = new JMenuItem("Linia 5");
+		linia5.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((DrawFunctions) middlePanel).setLineWidth(5);
+			}
+		});
+		
+		menu.add(linia5);
+		
+		JMenuItem linia7 = new JMenuItem("Linia 7");
+		linia7.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((DrawFunctions) middlePanel).setLineWidth(7);
+				
+			}
+		});
+		
+		menu.add(linia7);
 
 	
 		menuItem = new JMenuItem("Autor: Artur Werys");

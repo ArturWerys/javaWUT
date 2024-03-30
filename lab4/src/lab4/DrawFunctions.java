@@ -13,8 +13,28 @@ public class DrawFunctions extends JPanel {
     private static final int RECT_WIDTH = 400;
     private static final int RECT_HEIGHT = RECT_WIDTH;
 
-    int[] x = new int[33]; 
-    int[] y = new int[33];
+    int[] xRegular = new int[33];
+    int[] yRegular = new int[33];
+    
+	
+    public int[] getxRegular() {
+		return xRegular;
+	}
+    
+    public int[] getyRegular() {
+		return yRegular;
+	}
+    
+    int[] xRandom = new int[33];
+    int[] yRandom = new int[33];
+    
+    public int[] getyRandom() {
+		return yRandom;
+	}
+
+	public int[] getxRandom() {
+		return xRandom;
+	}
     
     int wierzcholkiLosowe = 0;
     
@@ -28,10 +48,27 @@ public class DrawFunctions extends JPanel {
 		this.losowy = losowy;
 	}
 
-	Color color = Color.blue;
-    int gruboscLini = 5;
+	Color lineColor = Color.blue;
     
-    Random r = new Random();
+	public Color getLineColor() {
+		return lineColor;
+	}
+
+	public void setLineColor(Color lineColor) {
+		this.lineColor = lineColor;
+	}
+
+	int lineWidth = 1;
+    
+    public int getLineWidth() {
+		return lineWidth;
+	}
+
+	public void setLineWidth(int lineWidth) {
+		this.lineWidth = lineWidth;
+	}
+
+	Random r = new Random();
     Random r2 = new Random();    
     Slider slider;
     
@@ -45,8 +82,8 @@ public class DrawFunctions extends JPanel {
 
     	int iloscW = slider.getSliderValue();
     	
-    	x = new int[iloscW];
-        y = new int[iloscW];
+    	xRegular = new int[iloscW];
+        yRegular = new int[iloscW];
 
         int centerX = getWidth() / 2;
         int centerY = getHeight() / 2;
@@ -54,8 +91,8 @@ public class DrawFunctions extends JPanel {
 
         for (int i = 0; i < iloscW; i++) {
             double angle = 2 * Math.PI * i / iloscW;
-            x[i] = (int) (centerX + radius * Math.cos(angle));
-            y[i] = (int) (centerY + radius * Math.sin(angle));
+            xRegular[i] = (int) (centerX + radius * Math.cos(angle));
+            yRegular[i] = (int) (centerY + radius * Math.sin(angle));
         }
 
         repaint();
@@ -65,12 +102,14 @@ public class DrawFunctions extends JPanel {
     
     public void RysowanieLosowe() {
         wierzcholkiLosowe = r2.nextInt(31);
-        x = new int[wierzcholkiLosowe]; 
-        y = new int[wierzcholkiLosowe]; 
+        
+        xRandom = new int[wierzcholkiLosowe]; 
+        yRandom = new int[wierzcholkiLosowe]; 
         
         for (int i = 0; i < wierzcholkiLosowe; i++) {
-            x[i] = r.nextInt(RECT_WIDTH);
-            y[i] = r.nextInt(RECT_HEIGHT);
+            xRandom[i] = r.nextInt(RECT_WIDTH);
+            yRandom[i] = r.nextInt(RECT_HEIGHT);
+            
         }
         repaint(); 
     }
@@ -85,25 +124,23 @@ public class DrawFunctions extends JPanel {
         Graphics2D g2d = (Graphics2D) g.create();
         
         isLosowy();
+        getLineWidth();
+        
+        BasicStroke bs1 = new BasicStroke(lineWidth);
+        g2d.setStroke(bs1);
+        g2d.setColor(getLineColor());
 
-        System.out.println(losowy);
+
     	 if(losowy) {
-    		 g2d.drawPolygon(x, y, wierzcholkiLosowe);
+    		 g2d.drawPolygon(xRandom, yRandom, wierzcholkiLosowe);
     		 g2d.dispose();
     	 }
     	 else {
-    		 if (x != null && y != null) {
-                 
-                 g2d.setColor(Color.BLUE);
-                 g2d.drawPolygon(x, y, slider.sliderValue);
+    		 if (xRegular != null && yRegular != null) {
+    			 
+                 g2d.drawPolygon(xRegular, yRegular, slider.sliderValue);
                  g2d.dispose();
                  
-//                 Graphics2D g2d = (Graphics2D) g.create();
-//                 g2d.setColor(Color.BLUE);
-//                 g2d.fillPolygon(xPoints, yPoints, numberOfVertices);
-//                 g2d.setColor(Color.BLACK);
-//                 g2d.drawPolygon(xPoints, yPoints, numberOfVertices);
-//                 g2d.dispose();
              }
     	 }
     	    
