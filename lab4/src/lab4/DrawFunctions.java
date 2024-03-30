@@ -75,15 +75,6 @@ public class DrawFunctions extends JPanel {
         repaint(); 
     }
 
-    public int getIloscWierzcholkow() {
-        return wierzcholkiLosowe;
-    }
-
-    public void setIloscWierzcholkow(int iloscWierzcholkow) {
-        this.wierzcholkiLosowe = iloscWierzcholkow;
-
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
     	
@@ -98,12 +89,19 @@ public class DrawFunctions extends JPanel {
     		 g2d.drawPolygon(x, y, wierzcholkiLosowe);
     		 g2d.dispose();
     	 }
-    	 if(losowy == false) {
+    	 else {
     		 if (x != null && y != null) {
                  
-                 g2d.setColor(Color.BLACK);
+                 g2d.setColor(Color.BLUE);
                  g2d.drawPolygon(x, y, s.sliderValue);
                  g2d.dispose();
+                 
+//                 Graphics2D g2d = (Graphics2D) g.create();
+//                 g2d.setColor(Color.BLUE);
+//                 g2d.fillPolygon(xPoints, yPoints, numberOfVertices);
+//                 g2d.setColor(Color.BLACK);
+//                 g2d.drawPolygon(xPoints, yPoints, numberOfVertices);
+//                 g2d.dispose();
              }
     	 }
     	    
