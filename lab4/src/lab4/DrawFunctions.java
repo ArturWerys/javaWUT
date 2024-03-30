@@ -16,7 +16,27 @@ public class DrawFunctions extends JPanel {
     int[] xRegular = new int[33];
     int[] yRegular = new int[33];
     
+    int[] xRandom = new int[33];
+    int[] yRandom = new int[33];
+    
+    int wierzcholkiLosowe = 0;
+    
+    boolean losowy = true;
+    
+	Color lineColor = Color.blue;
 	
+	int lineWidth = 1;
+	
+	Random r = new Random();
+    Random r2 = new Random();    
+    Slider slider;
+    
+    int R = 100;
+    
+    
+	// Getters and Setters
+    
+    
     public int[] getxRegular() {
 		return xRegular;
 	}
@@ -24,9 +44,6 @@ public class DrawFunctions extends JPanel {
     public int[] getyRegular() {
 		return yRegular;
 	}
-    
-    int[] xRandom = new int[33];
-    int[] yRandom = new int[33];
     
     public int[] getyRandom() {
 		return yRandom;
@@ -36,10 +53,6 @@ public class DrawFunctions extends JPanel {
 		return xRandom;
 	}
     
-    int wierzcholkiLosowe = 0;
-    
-    boolean losowy = true;
-    
     public boolean isLosowy() {
 		return losowy;
 	}
@@ -47,8 +60,6 @@ public class DrawFunctions extends JPanel {
 	public void setLosowy(boolean losowy) {
 		this.losowy = losowy;
 	}
-
-	Color lineColor = Color.blue;
     
 	public Color getLineColor() {
 		return lineColor;
@@ -58,8 +69,6 @@ public class DrawFunctions extends JPanel {
 		this.lineColor = lineColor;
 	}
 
-	int lineWidth = 1;
-    
     public int getLineWidth() {
 		return lineWidth;
 	}
@@ -68,15 +77,11 @@ public class DrawFunctions extends JPanel {
 		this.lineWidth = lineWidth;
 	}
 
-	Random r = new Random();
-    Random r2 = new Random();    
-    Slider slider;
-    
-    int R = 100;
-
     public DrawFunctions(Slider slider) {
     	this.slider = slider;
     }
+    
+    
     
     public void RysowanieWybranejWartosci() {
 

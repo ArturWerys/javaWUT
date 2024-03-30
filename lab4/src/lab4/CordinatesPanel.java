@@ -31,7 +31,7 @@ public class CordinatesPanel extends JPanel {
         
         this.draw = draw;
         
-        label = new JLabel(); // Tworzenie JLabel
+        label = new JLabel(); 
         
         button = new JButton("Współrzędne");
         button.addActionListener(new ActionListener() {
@@ -65,7 +65,7 @@ public class CordinatesPanel extends JPanel {
         });
         
         add(button);
-        add(label); // Dodawanie JLabel do panelu
+        add(label); 
         
         setBackground(Color.gray);
     }
