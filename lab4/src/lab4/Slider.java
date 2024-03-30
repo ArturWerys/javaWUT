@@ -15,8 +15,7 @@ public class Slider {
 
 	
 	Slider(){
-		// Slider
-		
+
 	slider = new JSlider(JSlider.HORIZONTAL, SLIDER_MIN, SLIDER_MAX, SLIDER_INIT);
 	slider.setMajorTickSpacing(10); //podzialki duze
 	slider.setMinorTickSpacing(1); //podzialki male

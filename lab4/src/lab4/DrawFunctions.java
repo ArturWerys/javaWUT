@@ -33,17 +33,17 @@ public class DrawFunctions extends JPanel {
     
     Random r = new Random();
     Random r2 = new Random();    
-    Slider s;
+    Slider slider;
     
     int R = 100;
 
     public DrawFunctions(Slider slider) {
-    	this.s = slider;
+    	this.slider = slider;
     }
     
     public void RysowanieWybranejWartosci() {
 
-    	int iloscW = s.getSliderValue();
+    	int iloscW = slider.getSliderValue();
     	
     	x = new int[iloscW];
         y = new int[iloscW];
@@ -75,6 +75,8 @@ public class DrawFunctions extends JPanel {
         repaint(); 
     }
 
+
+
     @Override
     protected void paintComponent(Graphics g) {
     	
@@ -93,7 +95,7 @@ public class DrawFunctions extends JPanel {
     		 if (x != null && y != null) {
                  
                  g2d.setColor(Color.BLUE);
-                 g2d.drawPolygon(x, y, s.sliderValue);
+                 g2d.drawPolygon(x, y, slider.sliderValue);
                  g2d.dispose();
                  
 //                 Graphics2D g2d = (Graphics2D) g.create();
