@@ -9,111 +9,95 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+public class PaintMainClass extends JFrame {
 
-public class PaintMain extends JFrame {
-
-    private int squareX;
-    private int squareY;
-    private int squareW=100;
-    private int squareH=100;
+    private ArrayList<Squares> squares = new ArrayList<>();
     
-    private int lineWidth=1;
+    private int lineWidth = 1;
+    private Color lineColor = Color.black;
 
-	private PaitingPanel paintingPanel;
+    private PaintingPanel paintingPanel;
     private JPanel optionsPanel;
     private JPanel sliderPanel;
-    
+
     private JButton colorChanger;
     private LineWidthSlider lineWidthSlider;
-    
-    
-    private Color lineColor = Color.black;
-    
-    public PaintMain() {
+
+    public PaintMainClass() {
         super("Paint Program");
         setSize(900, 900);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        paintingPanel = new PaitingPanel();
+        paintingPanel = new PaintingPanel();
         add(paintingPanel);
 
         paintingPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                squareX = e.getX();
-                squareY = e.getY();
-                paintingPanel.repaint(); 
+                squares.add(new Squares(e.getX(), e.getY(), 100, 100, lineColor, lineWidth));
+                paintingPanel.repaint();
             }
         });
-        
+
         optionsPanel = new JPanel();
-        optionsPanel.setPreferredSize(new Dimension(100,900));
+        optionsPanel.setPreferredSize(new Dimension(100, 900));
         optionsPanel.setBackground(Color.gray);
         add(optionsPanel, BorderLayout.WEST);
-        
+
         colorChanger = new JButton("Kolor");
         optionsPanel.add(colorChanger);
-        
+
         colorChanger.addActionListener(new ActionListener() {
-			
-        	@Override
-			public void actionPerformed(ActionEvent e) {
-				 Color newColor = JColorChooser.showDialog(null, "Wybierz kolor tła", lineColor);
-			        if (newColor != null) {
-			        	lineColor = newColor;
-			            paintingPanel.repaint();
-			        }
-				
-			}
-		});
-        
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color newColor = JColorChooser.showDialog(null, "Wybierz kolor lini", lineColor);
+                if (newColor != null) {
+                    lineColor = newColor;
+                }
+            }
+        });
+
         sliderPanel = new JPanel();
-        sliderPanel.setPreferredSize(new Dimension(900,50));
+        sliderPanel.setPreferredSize(new Dimension(900, 50));
         add(sliderPanel, BorderLayout.NORTH);
         sliderPanel.setBackground(Color.white);
-        
+
         lineWidthSlider = new LineWidthSlider();
         sliderPanel.add(lineWidthSlider);
-        
-        lineWidthSlider.addChangeListener(new ChangeListener() {
-			
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				lineWidth = lineWidthSlider.getSliderValue();
-				paintingPanel.repaint();
 
-				
-			}
-		});
-        
+        lineWidthSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                lineWidth = lineWidthSlider.getSliderValue();
+            }
+        });
+
         setVisible(true);
     }
-     
-    public void setLineWidth(int lineWidth) {
-		this.lineWidth = lineWidth;
-	}
 
     public static void main(String[] args) {
-        new PaintMain();
+        new PaintMainClass();
     }
 
-    class PaitingPanel extends JPanel {
-        
-        public PaitingPanel() {
-        	setLineWidth(lineWidth);
+    class PaintingPanel extends JPanel {
+
+        public PaintingPanel() {
         }
+
         @Override
         protected void paintComponent(Graphics g) {
-  
+
             super.paintComponent(g);
-            
+
             Graphics2D g2d = (Graphics2D) g.create();
             
-            BasicStroke bs1 = new BasicStroke(lineWidth);
-            g2d.setStroke(bs1);
             
-            g2d.setColor(lineColor);
-            g2d.drawRect(squareX, squareY, squareW, squareH);
-        }
-     
+            for (Squares square : squares) {
+                g2d.setColor(square.getColor());
+                g2d.setStroke(new BasicStroke(square.getLineWidth()));
+                g2d.drawRect(square.x, square.y, square.width, square.height);
+            }
+
     }
+}
 }
