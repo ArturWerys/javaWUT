@@ -19,7 +19,7 @@ public class DrawFunctions extends JPanel {
     int[] xRandom = new int[33];
     int[] yRandom = new int[33];
     
-    int wierzcholkiLosowe = 0;
+    int iloscWLosowych = 0;
     
     boolean losowy = true;
     
@@ -106,12 +106,13 @@ public class DrawFunctions extends JPanel {
 
     
     public void RysowanieLosowe() {
-        wierzcholkiLosowe = r2.nextInt(31);
+    	
+    	int iloscWLosowych = slider.getSliderValue();
+
+        xRandom = new int[iloscWLosowych]; 
+        yRandom = new int[iloscWLosowych]; 
         
-        xRandom = new int[wierzcholkiLosowe]; 
-        yRandom = new int[wierzcholkiLosowe]; 
-        
-        for (int i = 0; i < wierzcholkiLosowe; i++) {
+        for (int i = 0; i < iloscWLosowych; i++) {
             xRandom[i] = r.nextInt(RECT_WIDTH);
             yRandom[i] = r.nextInt(RECT_HEIGHT);
             
@@ -137,7 +138,7 @@ public class DrawFunctions extends JPanel {
 
 
     	 if(losowy) {
-    		 g2d.drawPolygon(xRandom, yRandom, wierzcholkiLosowe);
+    		 g2d.drawPolygon(xRandom, yRandom, slider.getSliderValue());
     		 g2d.dispose();
     	 }
     	 else {
