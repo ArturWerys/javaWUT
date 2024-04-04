@@ -7,12 +7,14 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+
 public class PaintMainClass extends JFrame {
 
-    private ArrayList<Squares> squares = new ArrayList<>();
+    private ArrayList<Shape> shapes = new ArrayList<Shape>();
     
     private int lineWidth = 1;
     private Color lineColor = Color.black;
@@ -23,9 +25,15 @@ public class PaintMainClass extends JFrame {
 
     private JButton colorChanger;
     private JButton sqaureChooser;
+    
+    private JButton lineChooser;
+    
     private LineWidthSlider lineWidthSlider;
     
-    private Line line;
+    private Line line = new Line(lineColor);
+    
+//    private Squares currentSquare;
+    
     
     int choosenShape = 0;
 
@@ -37,12 +45,85 @@ public class PaintMainClass extends JFrame {
         paintingPanel = new PaintingPanel();
         add(paintingPanel);
 
-        paintingPanel.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                squares.add(new Squares(e.getX(), e.getY(), 100, 100, lineColor, lineWidth));
-                paintingPanel.repaint();
-            }
-        });
+//        paintingPanel.addMouseListener(new MouseAdapter() {
+//            public void mousePressed(MouseEvent e) {
+////                squares.add(new Squares(e.getX(), e.getY(), 100, 100, lineColor, lineWidth));
+//                paintingPanel.repaint();
+//            }
+//        });
+        
+        paintingPanel.addMouseMotionListener((new MouseMotionListener() {
+			
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int x = e.getX();
+				int y = e.getY();
+				
+				if (choosenShape == 2){
+					
+					line.addPoint(x, y);
+					repaint();
+				}
+//				if (choosenShape ==1) {
+//					
+//				 currentSquare.setWidth(100); 
+//				 currentSquare.setHeight(100); 
+//				 repaint();
+//				}
+			}
+		}));
+        
+      paintingPanel.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				
+				
+//				if(choosenShape == 1) {
+//					shapes.add(currentSquare);
+//				}
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+				if (choosenShape ==2 ) {
+					line = new Line(lineColor);
+					System.out.println("rysuje linie w wybranym kolorze");
+					shapes.add(line);
+				}
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        
 
         optionsPanel = new JPanel();
         optionsPanel.setPreferredSize(new Dimension(100, 900));
@@ -58,6 +139,7 @@ public class PaintMainClass extends JFrame {
                 Color newColor = JColorChooser.showDialog(null, "Wybierz kolor lini", lineColor);
                 if (newColor != null) {
                     lineColor = newColor;
+                    System.out.println("Action listener - Nowy kolor wybrany");
                 }
             }
         });
@@ -71,6 +153,17 @@ public class PaintMainClass extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				choosenShape = 1;
 				
+			}
+		});
+        
+        lineChooser = new JButton("Linia");
+        optionsPanel.add(lineChooser);
+        
+        lineChooser.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				choosenShape = 2;
 			}
 		});
         
@@ -102,7 +195,6 @@ public class PaintMainClass extends JFrame {
     class PaintingPanel extends JPanel {
 
         public PaintingPanel() {
-        	line = new Line();
         }
 
         @Override
@@ -112,23 +204,22 @@ public class PaintMainClass extends JFrame {
 
             Graphics2D g2d = (Graphics2D) g.create();
             
+//            g2d.setColor(lineColor);
+            
             if(choosenShape == 1) {
-            	for (Squares square : squares) {
-                    g2d.setColor(square.getColor());
-                    g2d.setStroke(new BasicStroke(square.getLineWidth()));
-                    g2d.drawRect(square.x, square.y, square.width, square.height);
-                }
+                 g2d.setStroke(new BasicStroke(lineWidth));
+//            	 for (Shape square: shapes) square.draw(g2d);
 
             }
             else {
-            	     g2d.setColor(lineColor);
                      g2d.setStroke(new BasicStroke(lineWidth));
-                     line.draw(g2d);
+                     g2d.setColor(lineColor);
+
+                     for (Shape line: shapes) line.draw(g2d);
                  }
             	
             }
-            
-            
+
            
     }
 }
