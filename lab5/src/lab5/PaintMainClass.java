@@ -25,6 +25,7 @@ public class PaintMainClass extends JFrame {
 
     private JButton colorChanger;
     private JButton sqaureChooser;
+    private JButton rulerChooser;
     
     private JButton lineChooser;
     
@@ -43,6 +44,7 @@ public class PaintMainClass extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         paintingPanel = new PaintingPanel();
+        paintingPanel.setBackground(Color.white);
         add(paintingPanel);
 
 //        paintingPanel.addMouseListener(new MouseAdapter() {
@@ -167,11 +169,25 @@ public class PaintMainClass extends JFrame {
 			}
 		});
         
+        rulerChooser = new JButton("Gumka");
+        optionsPanel.add(rulerChooser);
+        
+        rulerChooser.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				choosenShape = 2;
+				lineWidth = 8;
+				lineColor = Color.white;
+			}
+		});
+        
 
         sliderPanel = new JPanel();
+        sliderPanel.setBackground(Color.LIGHT_GRAY);
         sliderPanel.setPreferredSize(new Dimension(900, 50));
         add(sliderPanel, BorderLayout.NORTH);
-        sliderPanel.setBackground(Color.white);
+       
 
         lineWidthSlider = new LineWidthSlider();
         sliderPanel.add(lineWidthSlider);
