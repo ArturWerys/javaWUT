@@ -1,5 +1,6 @@
 package lab5;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -11,8 +12,8 @@ public class Line extends Shape {
     private List<Integer> yList;  // Lista współrzędnych y
 
     // Konstruktor
-    public Line(Color color) {
-       super(color);
+    public Line(Color color, int lineWidth) {
+       super(color, lineWidth);
        System.out.println("Ustawilem kolor lini");
        xList = new ArrayList<Integer>();
        yList = new ArrayList<Integer>();
@@ -30,6 +31,7 @@ public class Line extends Shape {
        for (int i = 0; i < xList.size() - 1; ++i) 
        {	
     	  g2d.setColor(color);
+    	  g2d.setStroke(new BasicStroke(lineWidth));
           g2d.drawLine(xList.get(i), yList.get(i), xList.get(i + 1), yList.get(i + 1));
        }
     }

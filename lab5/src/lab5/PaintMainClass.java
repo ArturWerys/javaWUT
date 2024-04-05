@@ -30,7 +30,7 @@ public class PaintMainClass extends JFrame {
     
     private LineWidthSlider lineWidthSlider;
     
-    private Line line = new Line(lineColor);
+    private Line line = new Line(lineColor, lineWidth);
     
 //    private Squares currentSquare;
     
@@ -98,7 +98,7 @@ public class PaintMainClass extends JFrame {
 				// TODO Auto-generated method stub
 				
 				if (choosenShape ==2 ) {
-					line = new Line(lineColor);
+					line = new Line(lineColor, lineWidth);
 					System.out.println("rysuje linie w wybranym kolorze");
 					shapes.add(line);
 				}

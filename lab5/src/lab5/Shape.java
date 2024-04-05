@@ -6,10 +6,12 @@ import java.awt.Graphics2D;
 abstract public class Shape {
 
 	public Color color;
+	public int lineWidth;
 	
-	public Shape(Color color) {
-		// TODO Auto-generated constructor stub
-        this.color = color;
+	public Shape(Color color, int lineWidth) {
+
+		this.lineWidth = lineWidth;
+		this.color = color;
 
 	}
 
