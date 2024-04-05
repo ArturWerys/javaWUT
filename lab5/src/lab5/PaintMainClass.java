@@ -1,5 +1,6 @@
 package lab5;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -10,6 +11,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PaintMainClass extends JFrame {
@@ -26,6 +30,7 @@ public class PaintMainClass extends JFrame {
     private JButton colorChanger;
     private JButton sqaureChooser;
     private JButton rulerChooser;
+    private JButton saveButton;
     
     private JButton lineChooser;
     
@@ -40,7 +45,7 @@ public class PaintMainClass extends JFrame {
 
     public PaintMainClass() {
         super("Paint Program");
-        setSize(900, 900);
+        setSize(1200, 900);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         paintingPanel = new PaintingPanel();
@@ -128,7 +133,7 @@ public class PaintMainClass extends JFrame {
         
 
         optionsPanel = new JPanel();
-        optionsPanel.setPreferredSize(new Dimension(100, 900));
+        optionsPanel.setPreferredSize(new Dimension(150, 900));
         optionsPanel.setBackground(Color.gray);
         add(optionsPanel, BorderLayout.WEST);
 
@@ -182,6 +187,34 @@ public class PaintMainClass extends JFrame {
 			}
 		});
         
+        saveButton = new JButton("Zapisz do pliku");
+        optionsPanel.add(saveButton);
+        
+        saveButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				// Save to file
+		        BufferedImage image = new BufferedImage(paintingPanel.getWidth(), paintingPanel.getHeight(),BufferedImage.TYPE_INT_ARGB);
+		        Graphics2D g2d = image.createGraphics();
+		        paintingPanel.paintAll(g2d);
+		        							
+		        //Tworzenie pliku zapisu w folderze projektu
+		        File outputfile = new File("saved.png");
+		        							
+		        //Zapis do pliku
+		        try {
+		        	ImageIO.write(image, "png", outputfile);
+		        } catch (IOException ee) {
+		        	System.out.println(ee.getMessage());
+		        }
+	        	System.out.println("Zapisalem do pliku");
+
+				
+			}
+		});
+        
 
         sliderPanel = new JPanel();
         sliderPanel.setBackground(Color.LIGHT_GRAY);
@@ -200,6 +233,8 @@ public class PaintMainClass extends JFrame {
         });
 
         setVisible(true);
+        
+        
     }
     
     
@@ -235,7 +270,6 @@ public class PaintMainClass extends JFrame {
                  }
             	
             }
-
            
     }
 }
