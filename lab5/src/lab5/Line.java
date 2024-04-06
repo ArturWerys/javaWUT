@@ -14,7 +14,6 @@ public class Line extends Shape {
     // Konstruktor
     public Line(Color color, int lineWidth) {
        super(color, lineWidth);
-       System.out.println("Ustawilem kolor lini");
        xList = new ArrayList<Integer>();
        yList = new ArrayList<Integer>();
     }
