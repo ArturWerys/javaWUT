@@ -54,7 +54,6 @@ public class PaintMainClass extends JFrame {
 			
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -63,16 +62,18 @@ public class PaintMainClass extends JFrame {
 				int x = e.getX();
 				int y = e.getY();
 				
+				if (choosenShape ==1) {
+					
+					square.setEndPoint(x, y);
+					repaint();
+				}
 				if (choosenShape == 2){
 					
 					line.addPoint(x, y);
 					repaint();
 				}
 				
-				if (choosenShape ==1) {
-					square.setEndPoint(x, y);
-					repaint();
-				}
+				
 				
 			}
 		}));
@@ -87,14 +88,15 @@ public class PaintMainClass extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
+				if (choosenShape == 1) {
+					square = new Square(lineColor, lineWidth); 
+					square.setStartPoint(e.getX(),e.getY());
+					shapes.add(square);
+				}
+				
 				if (choosenShape == 2) {
 					line = new Line(lineColor, lineWidth);
 					shapes.add(line);
-				}
-				if (choosenShape == 1) {
-					square = new Square(lineColor, lineWidth);
-					square.setStartPoint(e.getX(),e.getY());
-					shapes.add(square);
 				}
 				
 			}
@@ -133,7 +135,6 @@ public class PaintMainClass extends JFrame {
                 Color newColor = JColorChooser.showDialog(null, "Wybierz kolor lini", lineColor);
                 if (newColor != null) {
                     lineColor = newColor;
-                    System.out.println("Action listener - Nowy kolor wybrany");
                 }
             }
         });
@@ -221,7 +222,6 @@ public class PaintMainClass extends JFrame {
 
         setVisible(true);
         
-        
     }
     
     
@@ -241,21 +241,21 @@ public class PaintMainClass extends JFrame {
             super.paintComponent(g);
 
             Graphics2D g2d = (Graphics2D) g.create();
+            
+            g2d.setStroke(new BasicStroke(lineWidth));
+            g2d.setColor(lineColor);
      
             if(choosenShape == 1) {
-                 g2d.setStroke(new BasicStroke(lineWidth));
-                 g2d.setColor(lineColor);
             	 for (Shape square: shapes) square.draw(g2d);
+   
 
             }
             if(choosenShape == 2) {
-                 g2d.setStroke(new BasicStroke(lineWidth));
-                 g2d.setColor(lineColor);
-
                  for (Shape line: shapes) line.draw(g2d);
                  }
             	
             }
+        
            
     }
 }

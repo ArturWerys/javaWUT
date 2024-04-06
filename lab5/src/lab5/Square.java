@@ -12,8 +12,6 @@ public class Square extends Shape{
 
     public Square(Color color, int lineWidth) {
     	super(color, lineWidth);
-      
-
     }
     
     public void setStartPoint(int x, int y) {
@@ -28,15 +26,16 @@ public class Square extends Shape{
 
 	@Override
 	public void draw(Graphics2D g2d) {
-		// TODO Auto-generated method stub
 		 
 		g2d.setColor(color); 
 		g2d.setStroke(new BasicStroke(lineWidth)); 
+		
 		int px = Math.min(x,x2);
         int py = Math.min(y,y2);
         int pw=Math.abs(x-x2);
         int ph=Math.abs(y-y2);    
-		g2d.drawRect(px, py, pw, ph); 
+		
+        g2d.drawRect(px, py, pw, ph); 
 		
 	}
 	
