@@ -22,6 +22,7 @@ public class PaintMainClass extends JFrame {
     
     private int lineWidth = 1;
     private Color lineColor = Color.black;
+    private Color squareColor = Color.red;
 
     private PaintingPanel paintingPanel;
     private JPanel optionsPanel;
@@ -37,7 +38,7 @@ public class PaintMainClass extends JFrame {
     private LineWidthSlider lineWidthSlider;
     
     private Line line = new Line(lineColor, lineWidth);
-    private Square square = new Square(lineColor, lineWidth);
+    private Square square = new Square(squareColor, lineWidth);
        
     int choosenShape = 0;
 
@@ -89,9 +90,12 @@ public class PaintMainClass extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				
 				if (choosenShape == 1) {
-					square = new Square(lineColor, lineWidth); 
+					
+					square = new Square(squareColor, lineWidth); 
 					square.setStartPoint(e.getX(),e.getY());
 					shapes.add(square);
+					
+					System.out.println("Kwadrat narsyowany");
 				}
 				
 				if (choosenShape == 2) {
@@ -135,6 +139,7 @@ public class PaintMainClass extends JFrame {
                 Color newColor = JColorChooser.showDialog(null, "Wybierz kolor lini", lineColor);
                 if (newColor != null) {
                     lineColor = newColor;
+                    square.setColor(newColor);
                 }
             }
         });
@@ -243,18 +248,15 @@ public class PaintMainClass extends JFrame {
             Graphics2D g2d = (Graphics2D) g.create();
             
             g2d.setStroke(new BasicStroke(lineWidth));
-            g2d.setColor(lineColor);
      
-            if(choosenShape == 1) {
-            	 for (Shape square: shapes) square.draw(g2d);
-   
-
+            if (choosenShape == 1) {
+                g2d.setColor(squareColor);
+                for (Shape square : shapes) square.draw(g2d);
+            } else if (choosenShape == 2) {
+                g2d.setColor(lineColor);
+                for (Shape line : shapes) line.draw(g2d);
             }
-            if(choosenShape == 2) {
-                 for (Shape line: shapes) line.draw(g2d);
-                 }
-            	
-            }
+        }
         
            
     }
