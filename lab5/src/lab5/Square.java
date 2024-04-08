@@ -46,5 +46,8 @@ public class Square extends Shape{
 	public void setColor(Color color) {
 	    this.color = color;
 	}
+	public int setLineWidth(int lineWidth) {
+		return this.lineWidth = lineWidth;
+	}
 	
 }

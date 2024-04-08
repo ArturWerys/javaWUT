@@ -21,6 +21,8 @@ public class PaintMainClass extends JFrame {
     private ArrayList<Shape> shapes = new ArrayList<Shape>();
     
     private int lineWidth = 1;
+    private int squareLineWidth = 5;
+    
     private Color lineColor = Color.black;
     private Color squareColor = Color.red;
 
@@ -38,9 +40,9 @@ public class PaintMainClass extends JFrame {
     private LineWidthSlider lineWidthSlider;
     
     private Line line = new Line(lineColor, lineWidth);
-    private Square square = new Square(squareColor, lineWidth);
+    private Square square = new Square(squareColor, squareLineWidth);
        
-    int choosenShape = 0;
+    int choosenShape = 2;
 
     public PaintMainClass() {
         super("Paint Program");
@@ -60,6 +62,7 @@ public class PaintMainClass extends JFrame {
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
+				
 				int x = e.getX();
 				int y = e.getY();
 				
@@ -84,6 +87,8 @@ public class PaintMainClass extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				square.setEndPoint(e.getX(), e.getY());
+				square = new Square(squareColor, squareLineWidth); 
+
 			}
 			
 			@Override
@@ -91,11 +96,11 @@ public class PaintMainClass extends JFrame {
 				
 				if (choosenShape == 1) {
 					
-					square = new Square(squareColor, lineWidth); 
+//					square = new Square(squareColor, lineWidth); 
+					
 					square.setStartPoint(e.getX(),e.getY());
 					shapes.add(square);
 					
-					System.out.println("Kwadrat narsyowany");
 				}
 				
 				if (choosenShape == 2) {
@@ -138,8 +143,17 @@ public class PaintMainClass extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Color newColor = JColorChooser.showDialog(null, "Wybierz kolor lini", lineColor);
                 if (newColor != null) {
-                    lineColor = newColor;
-                    square.setColor(newColor);
+                	if (choosenShape == 1) {
+                        square.setColor(newColor);
+
+                	}
+                	if(choosenShape == 2) {
+                        lineColor = newColor;
+
+                	}
+                	else {
+                		System.out.println("Nic sie nie zmienia");
+                	}
                 }
             }
         });
@@ -221,7 +235,20 @@ public class PaintMainClass extends JFrame {
         lineWidthSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                lineWidth = lineWidthSlider.getSliderValue();
+            	
+            	int lW = lineWidthSlider.getSliderValue();
+            	
+            	if (choosenShape == 1) {
+            		squareLineWidth = square.setLineWidth(lW);
+
+            	}
+            	if(choosenShape == 2) {
+                    lineWidth = lW;
+
+            	}
+            	else {
+            		System.out.println("Nic sie nie zmienia");
+            	}
             }
         });
 
