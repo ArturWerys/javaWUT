@@ -35,12 +35,19 @@ public class PaintMainClass extends JFrame {
     private JButton rulerChooser;
     private JButton saveButton;
     
+    private JButton loadButton;
+    
+    private JButton cleanButton;
+    
+    
     private JButton lineChooser;
     
     private LineWidthSlider lineWidthSlider;
     
     private Line line = new Line(lineColor, lineWidth);
+    
     private Square square = new Square(squareColor, squareLineWidth);
+    
        
     int choosenShape = 2;
 
@@ -77,8 +84,6 @@ public class PaintMainClass extends JFrame {
 					repaint();
 				}
 				
-				
-				
 			}
 		}));
         
@@ -95,12 +100,9 @@ public class PaintMainClass extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				
 				if (choosenShape == 1) {
-					
-//					square = new Square(squareColor, lineWidth); 
-					
+										
 					square.setStartPoint(e.getX(),e.getY());
-					shapes.add(square);
-					
+					shapes.add(square);					
 				}
 				
 				if (choosenShape == 2) {
@@ -149,7 +151,6 @@ public class PaintMainClass extends JFrame {
                 	}
                 	if(choosenShape == 2) {
                         lineColor = newColor;
-
                 	}
                 	else {
                 		System.out.println("Nic sie nie zmienia");
@@ -180,6 +181,7 @@ public class PaintMainClass extends JFrame {
 				choosenShape = 2;
 			}
 		});
+        
         
         rulerChooser = new JButton("Gumka");
         optionsPanel.add(rulerChooser);
@@ -222,6 +224,44 @@ public class PaintMainClass extends JFrame {
 			}
 		});
         
+        loadButton = new JButton("Wczytaj z pliku");
+        optionsPanel.add(loadButton);
+        
+        
+        loadButton.addActionListener(new ActionListener() {
+			private BufferedImage image;
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				choosenShape = 3;
+
+				// tutaj bedziemy otwierac zdjecei/jakis inny plik na ekran				
+				File plikWejsciowy = new File("saved.png"); //"tworzenie" pliku do wgrania o nazwie z nawiasu
+				
+				try {
+					image = ImageIO.read(plikWejsciowy);
+				} catch (IOException ex) {
+					System.out.println(ex.getMessage());
+				}
+				paintingPanel.image = this.image;
+				repaint();
+			}
+		});
+        
+        cleanButton = new JButton("Wyczyść");
+        optionsPanel.add(cleanButton);
+        
+        cleanButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(int i=0; i < shapes.size(); i++) {
+					shapes.clear();
+					repaint();
+				}
+			}
+		});
+        
 
         sliderPanel = new JPanel();
         sliderPanel.setBackground(Color.LIGHT_GRAY);
@@ -244,10 +284,9 @@ public class PaintMainClass extends JFrame {
             	}
             	if(choosenShape == 2) {
                     lineWidth = lW;
-
             	}
             	else {
-            		System.out.println("Nic sie nie zmienia");
+            		System.out.println("");
             	}
             }
         });
@@ -264,7 +303,9 @@ public class PaintMainClass extends JFrame {
 
     class PaintingPanel extends JPanel {
 
-        public PaintingPanel() {
+        protected BufferedImage image;
+
+		public PaintingPanel() {
         }
 
         @Override
@@ -274,17 +315,29 @@ public class PaintMainClass extends JFrame {
 
             Graphics2D g2d = (Graphics2D) g.create();
             
-            g2d.setStroke(new BasicStroke(lineWidth));
-     
+            if(image != null) {
+            	g2d.drawImage(image,  0, 0, this);
+            }
+
             if (choosenShape == 1) {
                 g2d.setColor(squareColor);
+                g2d.setStroke(new BasicStroke(squareLineWidth));
                 for (Shape square : shapes) square.draw(g2d);
-            } else if (choosenShape == 2) {
+            } 
+            if (choosenShape == 2) {
+            	
                 g2d.setColor(lineColor);
+                g2d.setStroke(new BasicStroke(lineWidth));
                 for (Shape line : shapes) line.draw(g2d);
             }
+            
+            //if (choosenShape == 3) {
+    		//	if(image != null) {
+    		//		g2d.drawImage(image, 0, 0, this);
+    		//	}
+            //}
+            
         }
-        
-           
     }
+
 }
