@@ -7,8 +7,6 @@ import java.awt.Rectangle;
 
 public class Square extends Shape{
 	
-    private Color color;
-    private int lineWidth;
 	private int x,y,x2,y2;
 
     public Square(Color color, int lineWidth) {
