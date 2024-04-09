@@ -30,16 +30,17 @@ public class PaintMainClass extends JFrame {
     private JButton colorChanger;
     private JButton sqaureChooser;
     private JButton rulerChooser;
-    private JButton saveButton;
-    
-    private JButton loadButton;
-    
+        
     private JButton cleanButton;
-    
     
     private JButton lineChooser;
     
     private LineWidthSlider lineWidthSlider;
+    
+    private JMenuBar menuBar;
+    private JMenu menu;
+    
+    private BufferedImage loadedImage = null;
        
     int choosenShape = 2;
 
@@ -108,59 +109,7 @@ public class PaintMainClass extends JFrame {
 				lineColor = Color.white;
 			}
 		});
-        
-        saveButton = new JButton("Zapisz do pliku");
-        optionsPanel.add(saveButton);
-        
-        saveButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				// Save to file
-		        BufferedImage image = new BufferedImage(paintingPanel.getWidth(), paintingPanel.getHeight(),BufferedImage.TYPE_INT_ARGB);
-		        Graphics2D g2d = image.createGraphics();
-		        paintingPanel.paintAll(g2d);
-		        							
-		        //Tworzenie pliku zapisu w folderze projektu
-		        File outputfile = new File("saved.png");
-		        							
-		        //Zapis do pliku
-		        try {
-		        	ImageIO.write(image, "png", outputfile);
-		        } catch (IOException ee) {
-		        	System.out.println(ee.getMessage());
-		        }
-	        	System.out.println("Zapisalem do pliku");
-
-				
-			}
-		});
-        
-        loadButton = new JButton("Wczytaj z pliku");
-        optionsPanel.add(loadButton);
-        
-        
-        loadButton.addActionListener(new ActionListener() {
-			private BufferedImage image;
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				choosenShape = 3;
-
-				// tutaj bedziemy otwierac zdjecei/jakis inny plik na ekran				
-				File plikWejsciowy = new File("saved.png"); //"tworzenie" pliku do wgrania o nazwie z nawiasu
-				
-				try {
-					image = ImageIO.read(plikWejsciowy);
-				} catch (IOException ex) {
-					System.out.println(ex.getMessage());
-				}
-				paintingPanel.image = this.image;
-				repaint();
-			}
-		});
-        
+               
         cleanButton = new JButton("Wyczyść");
         optionsPanel.add(cleanButton);
         
@@ -190,6 +139,122 @@ public class PaintMainClass extends JFrame {
             	lineWidth = lineWidthSlider.getSliderValue();	
             }
         });
+        
+        menuBar = new JMenuBar();
+        menu = new JMenu("Menu");
+        menuBar.add(menu);
+        
+        JMenuItem author = new JMenuItem("Autor");
+		author.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(author, "Artur Werys");
+				
+			}
+		});
+		menu.add(author);
+		
+		menu.addSeparator();
+		
+		JMenuItem saveToFile = new JMenuItem("Zapisz do pliku");
+		
+//		saveToFile.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				// Save to file
+//		        BufferedImage image = new BufferedImage(paintingPanel.getWidth(), paintingPanel.getHeight(),BufferedImage.TYPE_INT_ARGB);
+//		        Graphics2D g2d = image.createGraphics();
+//		        paintingPanel.paintAll(g2d);
+//		        							
+//		        //Tworzenie pliku zapisu w folderze projektu
+//		        File outputfile = new File("saved.png");
+//		        							
+//		        //Zapis do pliku
+//		        try {
+//		        	ImageIO.write(image, "png", outputfile);
+//		        } catch (IOException ee) {
+//		        	System.out.println(ee.getMessage());
+//		        }
+//	        	System.out.println("Zapisalem do pliku");
+//				
+//			}
+//		});
+		
+		saveToFile.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Otwórz okno dialogowe do wyboru miejsca zapisu i nazwy pliku
+		        JFileChooser fileChooser = new JFileChooser();
+		        int result = fileChooser.showSaveDialog(null);
+		        if (result == JFileChooser.APPROVE_OPTION) {
+		            File selectedFile = fileChooser.getSelectedFile();
+		            try {
+		                // Utwórz obrazek o wymiarach panelu
+		                BufferedImage image = new BufferedImage(paintingPanel.getWidth(), paintingPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		                Graphics2D g2d = image.createGraphics();
+		                // Narysuj zawartość panelu na obrazku
+		                paintingPanel.paintAll(g2d);
+		                // Zapisz obrazek do wybranego pliku
+		                ImageIO.write(image, "png", selectedFile);
+		                System.out.println("Zapisano do pliku: " + selectedFile.getAbsolutePath());
+		            } catch (IOException ex) {
+		                ex.printStackTrace();
+		            }
+		        }
+		    }
+		});
+		
+		menu.add(saveToFile);
+		
+		menu.addSeparator();
+
+		
+		JMenuItem loadFromFile = new JMenuItem("Wczytaj z pliku");
+		
+		// Zmodyfikuj ActionListener dla JMenuItem loadFromFile
+
+		loadFromFile.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Otwórz okno dialogowe do wyboru pliku
+		        JFileChooser fileChooser = new JFileChooser();
+		        int result = fileChooser.showOpenDialog(null);
+		        if (result == JFileChooser.APPROVE_OPTION) {
+		            File selectedFile = fileChooser.getSelectedFile();
+		            try {
+		                // Wczytaj obrazek z wybranego pliku
+		                loadedImage = ImageIO.read(selectedFile);
+		                // Ustaw wczytany obrazek na panelu do rysowania
+		                PaintingPanel.loadedImage = loadedImage;
+		                // Odśwież panel
+		                paintingPanel.repaint();
+		            } catch (IOException ex) {
+		                ex.printStackTrace();
+		            }
+		        }
+		    }
+		});
+
+
+
+		menu.add(loadFromFile);
+		
+		menu.addSeparator();
+
+		
+		JMenuItem exit = new JMenuItem("Exit");
+		exit.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);	
+			}
+		});
+		menu.add(exit);
+		
+        
+        setJMenuBar(menuBar);
 
         setVisible(true);
         
@@ -198,7 +263,9 @@ public class PaintMainClass extends JFrame {
     public static void main(String[] args) {
         new PaintMainClass();
     }
-
-
+    public void setLoadedImage(BufferedImage loadedImage) {
+        this.loadedImage = loadedImage;
+    }
+    
 
 }

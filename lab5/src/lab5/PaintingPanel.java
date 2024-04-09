@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 class PaintingPanel extends JPanel {
 
-    public static BufferedImage image;
+    public static BufferedImage loadedImage;
     private ArrayList<Shape> shapes = new ArrayList<Shape>();
     
     private Shape currentShape;
@@ -123,15 +123,20 @@ class PaintingPanel extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g.create();
-    	for (Shape shape: shapes) shape.draw(g2d);
+    	
 
         
-        if(image != null) {
-        	g2d.drawImage(image,  0, 0, this);
+        if(loadedImage != null) {
+        	g2d.drawImage(loadedImage,  0, 0, this);
         }
         if (currentShape != null) {
             currentShape.draw(g2d);
         }
+        for (Shape shape: shapes) shape.draw(g2d);
+
+        
+        g2d.dispose();
+
         
 
        
