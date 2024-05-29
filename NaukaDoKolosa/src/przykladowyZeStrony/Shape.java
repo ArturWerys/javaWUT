@@ -7,7 +7,7 @@ abstract public class Shape {
 
 	public Color color;
 	public int lineWidth;
-	
+
 	public Shape(Color color, int lineWidth) {
 
 		this.lineWidth = lineWidth;
@@ -16,6 +16,5 @@ abstract public class Shape {
 	}
 
 	abstract public void draw(Graphics2D g2d);
-
 
 }

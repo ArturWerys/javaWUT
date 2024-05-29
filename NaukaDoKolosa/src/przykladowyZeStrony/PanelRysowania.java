@@ -15,166 +15,170 @@ import java.util.Scanner;
 import javax.swing.*;
 
 public class PanelRysowania extends JPanel {
-    public static BufferedImage loadedImage;
-    ArrayList<Shape> shapes = new ArrayList<Shape>();
-    Shape currentShape;
+	public static BufferedImage loadedImage;
+	ArrayList<Shape> shapes = new ArrayList<Shape>();
+	Shape currentShape;
 
-    private int xCord;
-    private int yCord;
-    int xOdczyt;
-    int yOdczyt;
+	private int xCord;
+	private int yCord;
+	int xOdczyt;
+	int yOdczyt;
 
-    public PanelRysowania(PanelWsp panelWsp) {
-        super();
+	public PanelRysowania(PanelWsp panelWsp) {
+		super();
 
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (currentShape != null) {
-                    ((ProstokątPrzyklad) currentShape).setEndPoint(e.getX(), e.getY());
-                    shapes.add(currentShape);
-                    currentShape = null;
-                    repaint();
-                }
-            }
+		addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (currentShape != null) {
+					((ProstokątPrzyklad) currentShape).setEndPoint(e.getX(), e.getY());
+					shapes.add(currentShape);
+					currentShape = null;
+					repaint();
+				}
+			}
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                currentShape = new ProstokątPrzyklad(getLineColor(), 3);
-                ((ProstokątPrzyklad) currentShape).setStartPoint(e.getX(), e.getY());
-                setxCord(e.getX());
-                setyCord(e.getY());
+			@Override
+			public void mousePressed(MouseEvent e) {
+				currentShape = new ProstokątPrzyklad(getLineColor(), 3);
+				((ProstokątPrzyklad) currentShape).setStartPoint(e.getX(), e.getY());
+				setxCord(e.getX());
+				setyCord(e.getY());
 
-                panelWsp.updateXCoordinateText(getxCord());
-                panelWsp.updateYCoordinateText(getyCord());
-            }
+				panelWsp.updateXCoordinateText(getxCord());
+				panelWsp.updateYCoordinateText(getyCord());
+			}
 
-            @Override
-            public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
 
-            @Override
-            public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
 
-            @Override
-            public void mouseClicked(MouseEvent e) {}
-        });
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
 
-        addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                setxCord(e.getX());
-                setyCord(e.getY());
+		addMouseMotionListener(new MouseMotionListener() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				setxCord(e.getX());
+				setyCord(e.getY());
 
-                panelWsp.updateXCoordinateText(getxCord());
-                panelWsp.updateYCoordinateText(getyCord());
-            }
+				panelWsp.updateXCoordinateText(getxCord());
+				panelWsp.updateYCoordinateText(getyCord());
+			}
 
-            @Override
-            public void mouseMoved(MouseEvent e) {}
-        });
-    }
-    
-    public void squareFromCordThread(PanelWsp panelWsp) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-             
-                try {
-                    Thread.sleep(1000); // Sleep for 1 second
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                
-                panelWsp.updateXCoordinateText(xOdczyt);
-                panelWsp.updateYCoordinateText(yOdczyt);
-                
-                ProstokątPrzyklad currentShape = new ProstokątPrzyklad(getLineColor(), 3);
-                ((ProstokątPrzyklad) currentShape).setStartPoint(xOdczyt, yOdczyt);
-                
-                if (currentShape != null) {
-                    ((ProstokątPrzyklad) currentShape).setEndPoint(xOdczyt+50, yOdczyt+50);
-                    shapes.add(currentShape);
-                    currentShape = null;
-                    repaint();
-                }
-                
-            }
-        });
-        thread.start();
-    }
-    
-    
-    public void odczytZPlikuPrzezMenu() {
-        JFileChooser fileChooser = new JFileChooser();
-        int returnValue = fileChooser.showOpenDialog(null);
+			@Override
+			public void mouseMoved(MouseEvent e) {
+			}
+		});
+	}
 
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            try {
-                Scanner scanner = new Scanner(file);
+	public void squareFromCordThread(PanelWsp panelWsp) {
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
 
-                while (scanner.hasNextLine()) {
-                    String line = scanner.nextLine();
-                    String[] numbers = line.split(" ");
+				try {
+					Thread.sleep(1000); // Sleep for 1 second
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
 
-                    if (numbers.length == 2) {
-                        try {
-                            xOdczyt = Integer.parseInt(numbers[0]);
-                            yOdczyt = Integer.parseInt(numbers[1]);
-                            System.out.println("Liczba 1: " + xOdczyt + ", Liczba 2: " + yOdczyt);
-                        } catch (NumberFormatException e) {
-                            System.out.println("Nieprawidłowy format liczby w linii: " + line);
-                        }
-                    } else {
-                        System.out.println("Nieprawidłowy format linii: " + line);
-                    }
-                }
+				panelWsp.updateXCoordinateText(xOdczyt);
+				panelWsp.updateYCoordinateText(yOdczyt);
 
-                scanner.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("Nie znaleziono pliku.");
-            }
-        }
-    }
+				ProstokątPrzyklad currentShape = new ProstokątPrzyklad(getLineColor(), 3);
+				((ProstokątPrzyklad) currentShape).setStartPoint(xOdczyt, yOdczyt);
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g.create();
+				if (currentShape != null) {
+					((ProstokątPrzyklad) currentShape).setEndPoint(xOdczyt + 50, yOdczyt + 50);
+					shapes.add(currentShape);
+					currentShape = null;
+					repaint();
+				}
 
-        if (loadedImage != null) {
-            g2d.drawImage(loadedImage, 0, 0, this);
-        }
-        if (currentShape != null) {
-            currentShape.draw(g2d);
-        }
-        for (Shape shape : shapes) shape.draw(g2d);
+			}
+		});
+		thread.start();
+	}
 
-        g2d.dispose();
-    }
+	public void odczytZPlikuPrzezMenu() {
+		JFileChooser fileChooser = new JFileChooser();
+		int returnValue = fileChooser.showOpenDialog(null);
 
-    public int getxCord() {
-        return xCord;
-    }
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile();
+			try {
+				Scanner scanner = new Scanner(file);
 
-    public void setxCord(int xCord) {
-        this.xCord = xCord;
-    }
-    
-    public int getyCord() {
-        return yCord;
-    }
+				while (scanner.hasNextLine()) {
+					String line = scanner.nextLine();
+					String[] numbers = line.split(" ");
 
-    public void setyCord(int yCord) {
-        this.yCord = yCord;
-    }
+					if (numbers.length == 2) {
+						try {
+							xOdczyt = Integer.parseInt(numbers[0]);
+							yOdczyt = Integer.parseInt(numbers[1]);
+							System.out.println("Liczba 1: " + xOdczyt + ", Liczba 2: " + yOdczyt);
+						} catch (NumberFormatException e) {
+							System.out.println("Nieprawidłowy format liczby w linii: " + line);
+						}
+					} else {
+						System.out.println("Nieprawidłowy format linii: " + line);
+					}
+				}
 
-    public void clearDrawnShapes() {
-        shapes.clear();
-        repaint();
-    }
-    
-    public Color getLineColor() {
-        return PrzykladowyMain.lineColor;
-    }
+				scanner.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("Nie znaleziono pliku.");
+			}
+		}
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g.create();
+
+		if (loadedImage != null) {
+			g2d.drawImage(loadedImage, 0, 0, this);
+		}
+		if (currentShape != null) {
+			currentShape.draw(g2d);
+		}
+		for (Shape shape : shapes)
+			shape.draw(g2d);
+
+		g2d.dispose();
+	}
+
+	public int getxCord() {
+		return xCord;
+	}
+
+	public void setxCord(int xCord) {
+		this.xCord = xCord;
+	}
+
+	public int getyCord() {
+		return yCord;
+	}
+
+	public void setyCord(int yCord) {
+		this.yCord = yCord;
+	}
+
+	public void clearDrawnShapes() {
+		shapes.clear();
+		repaint();
+	}
+
+	public Color getLineColor() {
+		return PrzykladowyMain.lineColor;
+	}
 }

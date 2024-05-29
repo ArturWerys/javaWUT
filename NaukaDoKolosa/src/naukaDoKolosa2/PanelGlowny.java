@@ -11,76 +11,100 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
+import przykladowyZeStrony.PanelWsp;
+import przykladowyZeStrony.ProstokątPrzyklad;
 
 public class PanelGlowny extends JPanel {
-    
+
 	public static BufferedImage loadedImage;
 
-    ArrayList<Shape> shapes = new ArrayList<Shape>();
-    Shape currentShape;
-	
+	ArrayList<Shape> shapes = new ArrayList<Shape>();
+	Shape currentShape;
+
 	public PanelGlowny() {
 		super();
-		
+
 		setBackground(Color.black);
-			
+
 		addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				((Prostokąt) currentShape).setEndPoint(e.getX(), e.getY());
 				shapes.add(currentShape);
 				currentShape = null;
 				repaint();
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				currentShape = new Prostokąt(MainClass.kolor, 10);
-				((Prostokąt) currentShape).setStartPoint(e.getX(), e.getY());		
-				
+				((Prostokąt) currentShape).setStartPoint(e.getX(), e.getY());
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 	}
+
 	@Override
-    protected void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g) {
 
-        super.paintComponent(g);
+		super.paintComponent(g);
 
-        Graphics2D g2d = (Graphics2D) g.create();
-    	    
-        if(loadedImage != null) {
-        	g2d.drawImage(loadedImage,  0, 0, this);
-        }
-        if (currentShape != null) {
-            currentShape.draw(g2d);
-        }
-        for (Shape shape: shapes) shape.draw(g2d);
+		Graphics2D g2d = (Graphics2D) g.create();
 
-        
-        g2d.dispose();
+		if (loadedImage != null) {
+			g2d.drawImage(loadedImage, 0, 0, this);
+		}
+		if (currentShape != null) {
+			currentShape.draw(g2d);
+		}
+		for (Shape shape : shapes)
+			shape.draw(g2d);
 
-    }
+		g2d.dispose();
+
+	}
 	
+	public void animacjaThread() {
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// Wykonujemy losowanie 1000 razy
+				for (int i = 0; i < 10; i++) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException ex) {
+						ex.printStackTrace();
+					}
+					Prostokąt randomSquare = new Prostokąt(MainClass.kolor, 3);
+					randomSquare.setRandomPosition();
+					shapes.add(randomSquare);
+					repaint();
+				}
+			}
+		});
+		thread.start();
+	}
+
 	public void clearDrawnShapes() {
 		shapes.clear();
 		repaint();
